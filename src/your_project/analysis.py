@@ -141,9 +141,9 @@ def getArticleAnalysis(article):
     
 
 
-#APE TESTING
-f = open("/usr/local/google/home/snehalreddy/hackathon/simple-python-template/src/your_project/alien.txt", "r")
-text = f.read()
-# print(getKeyPointsClaude(text))
-print(getLeaningClaude(text, "Oumuamua and the debate over whether it could be an alien spacecraft."))
-# print(getBiasClaude(text, "AI will replace jobs"))
+# #APE TESTING
+# f = open("/usr/local/google/home/snehalreddy/hackathon/simple-python-template/src/your_project/alien.txt", "r")
+# text = f.read()
+# # print(getKeyPointsClaude(text))
+# print(getLeaningClaude(text, "Oumuamua and the debate over whether it could be an alien spacecraft."))
+# # print(getBiasClaude(text, "AI will replace jobs"))
