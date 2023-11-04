@@ -37,7 +37,7 @@ setup(
     ],
     entry_points={
         'console_scripts': [
-            'cli = your_project.cli:main',
+            'get_articles_on_topic = your_project.cli:get_articles_on_topic',
         ]
     },
 )
