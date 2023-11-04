@@ -7,6 +7,7 @@ api_key = "BSAt2nmuC57jmjrGEY9-JNAyAHTU6Z5"
 def get_urls_on_topic(topic, count=3):
     docs = search(topic, count=count)
     urls = [doc.metadata["link"] for doc in docs]
+    print("Got urls for topic: " + topic + " : " + str(urls))
     return urls
 
 def get_articles_from_urls(urls):
