@@ -11,6 +11,7 @@ from langchain.prompts import PromptTemplate
 from langchain.chains import LLMChain
 from langchain_experimental.llms.anthropic_functions import AnthropicFunctions
 from aletheia.models import ArticleAnalysis
+from aletheia.utils import remove_answer_tags
 
 llm = ChatAnthropic(temperature=0, anthropic_api_key=secret_key)
 
@@ -29,7 +30,8 @@ def getArticleTopic(article):
     llm = AnthropicFunctions(temperature=0, anthropic_api_key=secret_key, model_name="claude-2")
     extractor = LLMChain(llm=llm, prompt=prompt)   
     topic = extractor.predict(article=article)
-    return topic
+    topic_output = remove_answer_tags(topic)
+    return topic_output
 
 def getAntiTopic(topic):
     curContext = ""
@@ -102,13 +104,15 @@ def getBiasClaude(text, topic):
     valResp = llm(biasValPrompt)
     return int(valResp.content)
 
-def getLeaningClaude(text, topic, antiTopic):
+def getLeaningClaude(text, topic):
+    antiTopic = getAntiTopic(topic)
+    strongTopic = getStrongTopic(topic)
     print("Anti topic: " + antiTopic)
     leaningPromptMessage="Human: Here is an article, contained in <article> tags:" + \
                 "<article>\n" + text + "</article>" + \
                 "How strongly does the article say \
                 \"" + topic + "\" on a scale of 0-10, \
-                where 10 means \""  + topic + "\" \
+                where 10 means \""  + strongTopic + "\" \
                 and \"" + antiTopic + "\"?\n\n" + text 
     leaningPrompt = [
         HumanMessage(
@@ -131,14 +135,18 @@ def getLeaningClaude(text, topic, antiTopic):
 
 def getArticleAnalysis(article):
     topic = getArticleTopic(article)
-    antiTopic = getAntiTopic(topic)
     anal = {}
     anal["key_points"] = getKeyPointsClaude(article.content)
-    anal["leaning"] = getLeaningClaude(article.content, topic, antiTopic)/10.0
+    anal["leaning"] = getLeaningClaude(article.content, topic)/10.0
     anal["bias"] = getBiasClaude(article.content, topic)/10.0
     return anal
     
-
+'''if __name__ == "__main__":
+    url = "https://www.scientificamerican.com/article/the-science-is-clear-gun-control-saves-lives1/"
+    article = get_article_content([url])[0]
+    topic = getArticleTopic(article)
+    print("Topic: ", topic)
+'''
 
 # #APE TESTING
 # f = open("/usr/local/google/home/snehalreddy/hackathon/simple-python-template/src/your_project/alien.txt", "r")
