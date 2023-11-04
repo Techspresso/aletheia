@@ -17,6 +17,13 @@ article_content_extraction_schema = {
 }
 
 
+def get_article(url):
+    article = scrape_with_playwright([url], schema=article_content_extraction_schema)
+    if len(article) == 0:
+        return None
+    return article[0]
+
+
 def extract(content: str, schema: dict):
     return create_extraction_chain(schema=schema, llm=llm.llm).run(content)
 
@@ -38,6 +45,9 @@ def scrape_with_playwright(urls, schema):
     for split in splits:
         try:
             extracted = extract(schema=schema, content=split.page_content)
+            # I don't know why extraced is sometimes a dict with the results in 'item' and sometimes a list
+            if isinstance(extracted, dict):
+                extracted = extracted["item"]
         except Exception as e:
             print(f"Error extracting article: {split.metadata}", e)
             continue
@@ -48,7 +58,7 @@ def scrape_with_playwright(urls, schema):
 
 if __name__ == "__main__":
     urls = [
-        "https://www.nytimes.com/2023/11/03/world/middleeast/israel-bomb-jabaliya.html",
+        "https://www.theguardian.com/world/live/2023/oct/31/israel-hamas-war-live-updates-latest-news-today-hamas-clashes-idf-gaza-aid-plan-failure",
     ]
     extracted_content = scrape_with_playwright(
         urls, schema=article_content_extraction_schema
