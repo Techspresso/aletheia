@@ -18,7 +18,7 @@ llm = ChatAnthropic(temperature=0, anthropic_api_key=secret_key)
 justGetNumberText = "Please provide just the number with no explanation"
 
 def getArticleTopic(article):
-    prompt_template = "Extract the concise topic from this article: {article}. Avoid any preamble."
+    prompt_template = "Extract the concise topic from this article: {article}. Skip any premable and just specify the concise topic in one line. Write the final answer in <answer> tags."
     prompt = PromptTemplate(input_variables=["article"], template=prompt_template)
     llm = AnthropicFunctions(temperature=0, anthropic_api_key=secret_key, model_name="claude-2")
     extractor = LLMChain(llm=llm, prompt=prompt)   
