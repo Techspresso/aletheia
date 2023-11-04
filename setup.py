@@ -19,7 +19,9 @@ setup(
     py_modules=[splitext(basename(path))[0] for path in glob('src/*.py')],
     python_requires='>=3.8',
     include_package_data=True,
-    install_requires=[],
+    install_requires=[
+        'langchain>=0.0.330'
+    ],
     extras_require={
         'test': [
             'pytest>=7.4.3',
