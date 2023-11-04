@@ -19,5 +19,10 @@ install-test-dependencies:
 	pip3 install .[test]
 	@echo "Test dependencies installed"
 
+install-playwright:
+	@echo "Installing browsers"
+	python -m playwright install
+	@echo "Browsers installed"
+
 test: 
 	pytest

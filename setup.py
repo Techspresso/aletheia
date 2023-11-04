@@ -21,7 +21,11 @@ setup(
     include_package_data=True,
     install_requires=[
         'langchain>=0.0.330',
+        'langchain_experimental>=0.0.37',
         'anthropic>=0.5.0',
+        'playwright>=1.39.0',
+        'beautifulsoup4>=4.12.2',
+        'tiktoken>=0.5.1',
     ],
     extras_require={
         'test': [
