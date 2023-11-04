@@ -35,8 +35,6 @@ def getKeyPointsClaude(text):
     return resp.content
 
 def getBiasClaude(text, topic):
-    antiTopic = getAntiTopic(topic)
-    strongTopic = getStrongTopic(topic)
     biasPromptMessage = "Human: Here is an article, contained in <article> tags:" + \
                 "<article>\n" + text + "</article>" + \
                 "\n\nHow biased is the article with respect to \
@@ -64,6 +62,7 @@ def getBiasClaude(text, topic):
 def getLeaningClaude(text, topic):
     antiTopic = getAntiTopic(topic)
     strongTopic = getStrongTopic(topic)
+    print("Anti topic: " + antiTopic)
     leaningPromptMessage="Human: Here is an article, contained in <article> tags:" + \
                 "<article>\n" + text + "</article>" + \
                 "How strongly does the article say \
