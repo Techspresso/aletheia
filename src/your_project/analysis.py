@@ -8,13 +8,22 @@ from langchain.chat_models import ChatAnthropic
 from config import secret_key
 from langchain.chat_models import ChatAnthropic
 from langchain.schema import AIMessage, HumanMessage, SystemMessage
+from langchain.prompts import PromptTemplate
+from get_article import get_article
+from langchain.chains import LLMChain
+from langchain_experimental.llms.anthropic_functions import AnthropicFunctions
 
 llm = ChatAnthropic(temperature=0, anthropic_api_key=secret_key)
 
 justGetNumberText = "Please provide just the number with no explanation"
 
 def getArticleTopic(article):
-    return "AI will replace jobs"
+    prompt_template = "Extract the concise topic from this article: {article}. Avoid any preamble."
+    prompt = PromptTemplate(input_variables=["article"], template=prompt_template)
+    llm = AnthropicFunctions(temperature=0, anthropic_api_key=secret_key, model_name="claude-2")
+    extractor = LLMChain(llm=llm, prompt=prompt)   
+    topic = extractor.predict(article=article)
+    return topic
 
 def getAntiTopic(topic):
     return "AI will not at all replace jobs"
