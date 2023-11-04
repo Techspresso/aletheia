@@ -4,13 +4,13 @@ from langchain.chat_models import ChatOpenAI
 from langchain.prompts import ChatPromptTemplate
 from langchain.chains import create_tagging_chain, create_tagging_chain_pydantic
 from langchain.chat_models import ChatAnthropic
-from your_project.config import secret_key
+from aletheia.config import secret_key
 from langchain.chat_models import ChatAnthropic
 from langchain.schema import AIMessage, HumanMessage, SystemMessage
 from langchain.prompts import PromptTemplate
 from langchain.chains import LLMChain
 from langchain_experimental.llms.anthropic_functions import AnthropicFunctions
-from your_project.models import ArticleAnalysis
+from aletheia.models import ArticleAnalysis
 
 llm = ChatAnthropic(temperature=0, anthropic_api_key=secret_key)
 

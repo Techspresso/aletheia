@@ -1,6 +1,6 @@
 from langchain.document_loaders import BraveSearchLoader
 
-from your_project.get_article import get_article_content
+from aletheia.get_article import get_article_content
 
 api_key = "BSAt2nmuC57jmjrGEY9-JNAyAHTU6Z5"
 

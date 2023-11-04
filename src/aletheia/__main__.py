@@ -2,7 +2,7 @@
 The main package entrypoint
 """
 
-from your_project import cli
+from aletheia import cli
 
 if __name__ == '__main__':
     cli.main()
