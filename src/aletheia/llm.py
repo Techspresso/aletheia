@@ -1,6 +1,6 @@
 from langchain_experimental.llms.anthropic_functions import AnthropicFunctions
 
-from your_project.config import secret_key
+from aletheia.config import secret_key
 
 llm = AnthropicFunctions(temperature=0, anthropic_api_key=secret_key)
 

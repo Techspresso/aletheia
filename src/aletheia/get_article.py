@@ -6,8 +6,8 @@ from langchain.schema import AIMessage, HumanMessage, SystemMessage
 from langchain.document_transformers import BeautifulSoupTransformer
 
 from langchain.prompts import ChatPromptTemplate
-from your_project import llm
-from your_project.models import Article
+from aletheia import llm
+from aletheia.models import Article
 
 def get_article_content(urls):
     loader = AsyncChromiumLoader(urls)

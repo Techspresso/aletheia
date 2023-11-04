@@ -1,9 +1,9 @@
 from pprint import pprint
 import sys
-from your_project import get_similar_articles
-from your_project.analysis import getArticleAnalysis, getArticleTopic
-from your_project.get_article import get_article_content
-from your_project.models import Article
+from aletheia import get_similar_articles
+from aletheia.analysis import getArticleAnalysis, getArticleTopic
+from aletheia.get_article import get_article_content
+from aletheia.models import Article
 
 
 def main():
