@@ -1,17 +1,16 @@
-import models 
 from urllib.request import urlopen
 from bs4 import BeautifulSoup
 from langchain.chat_models import ChatOpenAI
 from langchain.prompts import ChatPromptTemplate
 from langchain.chains import create_tagging_chain, create_tagging_chain_pydantic
 from langchain.chat_models import ChatAnthropic
-from config import secret_key
+from your_project.config import secret_key
 from langchain.chat_models import ChatAnthropic
 from langchain.schema import AIMessage, HumanMessage, SystemMessage
 from langchain.prompts import PromptTemplate
-from get_article import get_article
 from langchain.chains import LLMChain
 from langchain_experimental.llms.anthropic_functions import AnthropicFunctions
+from your_project.models import ArticleAnalysis
 
 llm = ChatAnthropic(temperature=0, anthropic_api_key=secret_key)
 
@@ -99,10 +98,10 @@ def getLeaningClaude(text, topic):
 
 def getArticleAnalysis(article):
     topic = getArticleTopic(article)
-    anal = ArticleAnalysis()
-    anal.key_points = getKeyPointsClaude(article.text)
-    anal.leaning = getLeaningClaude(article.text, topic)/10.0
-    anal.bias = getBiasClaude(article.text, topic)/10.0
+    anal = {}
+    anal["key_points"] = getKeyPointsClaude(article.content)
+    anal["leaning"] = getLeaningClaude(article.content, topic)/10.0
+    anal["bias"] = getBiasClaude(article.content, topic)/10.0
     return anal
     
 

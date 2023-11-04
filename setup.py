@@ -38,6 +38,7 @@ setup(
     entry_points={
         'console_scripts': [
             'get_articles_on_topic = your_project.cli:get_articles_on_topic',
+            'get_analysis = your_project.cli:get_analysis_from_url',
         ]
     },
 )
