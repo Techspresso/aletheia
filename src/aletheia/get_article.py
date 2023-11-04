@@ -12,8 +12,6 @@ from aletheia.models import Article
 def get_article_content(urls):
     loader = AsyncChromiumLoader(urls)
     docs = loader.load()
-    # get_articles_on_topic()
-    # main()
     bs_transformer = BeautifulSoupTransformer()
     docs_transformed = bs_transformer.transform_documents(
         docs, tags_to_extract=["article", "h1"], unwanted_tags=["aside"]
