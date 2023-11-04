@@ -7,6 +7,9 @@ api_key = "BSAt2nmuC57jmjrGEY9-JNAyAHTU6Z5"
 def get_articles_on_topic(topic, count=3):
     docs = search(topic, count=count)
     urls = [doc.metadata["link"] for doc in docs]
+    return urls
+
+def get_articles_from_urls(urls):
     articles = [get_article(url) for url in urls]
     return articles
 
@@ -18,4 +21,4 @@ def search(topic, count=3):
     return loader.load()
 
 if __name__ == "__main__":
-    print(get_articles_on_topic("hamas and isreal"))
+    print(get_articles_on_topic("hamas"))
