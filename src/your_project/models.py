@@ -5,6 +5,7 @@ from typing import List
 class Article:
     html: str
     title: str
+    summary: str
     content: str
 
 @dataclass
