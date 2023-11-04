@@ -20,7 +20,8 @@ setup(
     python_requires='>=3.8',
     include_package_data=True,
     install_requires=[
-        'langchain>=0.0.330'
+        'langchain>=0.0.330',
+        'anthropic>=0.5.0',
     ],
     extras_require={
         'test': [
