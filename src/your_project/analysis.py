@@ -16,6 +16,13 @@ llm = ChatAnthropic(temperature=0, anthropic_api_key=secret_key)
 
 justGetNumberText = "Please provide just the number with no explanation"
 
+justGetStatement = "Can you just give one of the statements from your answer without any explanation?\n"
+
+negateStartStatements = ["Human: I am trying to learn english\n", \
+                    "Human: I am specifically trying to learn negating statements in english.\n", \
+                    "Human: Can you give some examples please?\n", \
+                    "Human: Can you negate \"I am going to school\"?\n"]
+
 def getArticleTopic(article):
     prompt_template = "Extract the concise topic from this article: {article}. Skip any premable and just specify the concise topic in one line. Write the final answer in <answer> tags."
     prompt = PromptTemplate(input_variables=["article"], template=prompt_template)
@@ -25,7 +32,35 @@ def getArticleTopic(article):
     return topic
 
 def getAntiTopic(topic):
-    return "AI will not at all replace jobs"
+    curContext = ""
+    for statement in negateStartStatements:
+        curContext+=statement
+        curContext+="Assistant: "
+        prompt = [
+            HumanMessage(
+                content=curContext 
+            )
+        ]
+        resp = llm(prompt)
+        curContext += resp.content
+    curContext+="Human: Can you negate \"" + topic + "\"?\n"
+    curContext+="Assistant: "
+    prompt = [
+        HumanMessage(
+            content=curContext 
+        )
+    ]
+    resp = llm(prompt)
+    curContext += resp.content
+    curContext+="Human: " + justGetStatement 
+    curContext+="Assistant: "
+    prompt = [
+        HumanMessage(
+            content=curContext 
+        )
+    ]
+    resp = llm(prompt)
+    return resp.content
 
 def getStrongTopic(topic):
     return "AI will definitely replace jobs"
@@ -107,8 +142,8 @@ def getArticleAnalysis(article):
 
 
 #APE TESTING
-# f = open("/usr/local/google/home/snehalreddy/hackathon/simple-python-template/src/your_project/sample.txt", "r")
-# text = f.read()
+f = open("/usr/local/google/home/snehalreddy/hackathon/simple-python-template/src/your_project/alien.txt", "r")
+text = f.read()
 # print(getKeyPointsClaude(text))
-# print(getLeaningClaude(text, "AI will replace jobs"))
+print(getLeaningClaude(text, "Oumuamua and the debate over whether it could be an alien spacecraft."))
 # print(getBiasClaude(text, "AI will replace jobs"))
