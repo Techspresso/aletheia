@@ -5,59 +5,52 @@ from langchain.document_loaders import AsyncChromiumLoader
 from langchain.document_transformers import BeautifulSoupTransformer
 
 from your_project import llm
+from your_project.models import Article
 
 article_content_extraction_schema = {
     "properties": {
-        "news_article_title": {"type": "string"},
-        "news_article_summary": {"type": "string"},
+        "title": {"type": "string"},
+        "summary": {"type": "string"},
+        "content": {"type": "string"},
     },
-    "required": ["news_article_title", "news_article_summary"],
+    "required": ["title", "summary", "content"],
 }
 
 
 def extract(content: str, schema: dict):
     return create_extraction_chain(schema=schema, llm=llm.llm).run(content)
 
-def extracContent():
-    from langchain.chains import LLMChain
-    from langchain.llms import OpenAI
-    from langchain.prompts import PromptTemplate
-    _EXTRACTION_TEMPLATE = """Extract and save the relevant entities mentioned \
-    in the following passage together with their properties.
-
-    Only extract the properties mentioned in the 'information_extraction' function.
-
-    If a property is not present and is not required in the function parameters, do not include it in the output.
-
-    Passage:
-    {input}
-    """  # noqa: E501
-    prompt = PromptTemplate(
-        input_variables=["adjective"], template=prompt_template
-    )
-    llm = LLMChain(llm=OpenAI(), prompt=prompt)
 
 def scrape_with_playwright(urls, schema):
     loader = AsyncChromiumLoader(urls)
     docs = loader.load()
     bs_transformer = BeautifulSoupTransformer()
     docs_transformed = bs_transformer.transform_documents(
-        docs, tags_to_extract=["span"]
+        docs, tags_to_extract=["article", "p", "li", "h1", "h2", "h3"]
     )
-    print("Extracting content with LLM")
 
-    # Grab the first 1000 tokens of the site
     splitter = RecursiveCharacterTextSplitter.from_tiktoken_encoder(
         chunk_size=80000, chunk_overlap=0
     )
     splits = splitter.split_documents(docs_transformed)
 
-    # Process the first split
-    extracted_content = extract(schema=schema, content=splits[0].page_content)
-    pprint.pprint(extracted_content)
-    return extracted_content
+    articles = []
+    for split in splits:
+        try:
+            extracted = extract(schema=schema, content=split.page_content)
+        except Exception as e:
+            print(f"Error extracting article: {split.metadata}", e)
+            continue
+        articles.append(Article(html=splits[0].page_content, **extracted[0]))
+
+    return articles
+
 
 if __name__ == "__main__":
-    urls = []
-    extracted_content = scrape_with_playwright(urls, schema=article_content_extraction_schema)
+    urls = [
+        "https://www.nytimes.com/2023/11/03/world/middleeast/israel-bomb-jabaliya.html",
+    ]
+    extracted_content = scrape_with_playwright(
+        urls, schema=article_content_extraction_schema
+    )
     print(extracted_content)
