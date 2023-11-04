@@ -102,15 +102,13 @@ def getBiasClaude(text, topic):
     valResp = llm(biasValPrompt)
     return int(valResp.content)
 
-def getLeaningClaude(text, topic):
-    antiTopic = getAntiTopic(topic)
-    strongTopic = getStrongTopic(topic)
+def getLeaningClaude(text, topic, antiTopic):
     print("Anti topic: " + antiTopic)
     leaningPromptMessage="Human: Here is an article, contained in <article> tags:" + \
                 "<article>\n" + text + "</article>" + \
                 "How strongly does the article say \
                 \"" + topic + "\" on a scale of 0-10, \
-                where 10 means \""  + strongTopic + "\" \
+                where 10 means \""  + topic + "\" \
                 and \"" + antiTopic + "\"?\n\n" + text 
     leaningPrompt = [
         HumanMessage(
@@ -133,9 +131,10 @@ def getLeaningClaude(text, topic):
 
 def getArticleAnalysis(article):
     topic = getArticleTopic(article)
+    antiTopic = getAntiTopic(topic)
     anal = {}
     anal["key_points"] = getKeyPointsClaude(article.content)
-    anal["leaning"] = getLeaningClaude(article.content, topic)/10.0
+    anal["leaning"] = getLeaningClaude(article.content, topic, antiTopic)/10.0
     anal["bias"] = getBiasClaude(article.content, topic)/10.0
     return anal
     
