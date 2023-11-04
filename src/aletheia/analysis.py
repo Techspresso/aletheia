@@ -11,6 +11,7 @@ from langchain.prompts import PromptTemplate
 from langchain.chains import LLMChain
 from langchain_experimental.llms.anthropic_functions import AnthropicFunctions
 from aletheia.models import ArticleAnalysis
+from aletheia.utils import remove_answer_tags
 
 llm = ChatAnthropic(temperature=0, anthropic_api_key=secret_key)
 
@@ -29,7 +30,8 @@ def getArticleTopic(article):
     llm = AnthropicFunctions(temperature=0, anthropic_api_key=secret_key, model_name="claude-2")
     extractor = LLMChain(llm=llm, prompt=prompt)   
     topic = extractor.predict(article=article)
-    return topic
+    topic_output = remove_answer_tags(topic)
+    return topic_output
 
 def getAntiTopic(topic):
     curContext = ""
@@ -139,7 +141,12 @@ def getArticleAnalysis(article):
     anal["bias"] = getBiasClaude(article.content, topic)/10.0
     return anal
     
-
+'''if __name__ == "__main__":
+    url = "https://www.scientificamerican.com/article/the-science-is-clear-gun-control-saves-lives1/"
+    article = get_article_content([url])[0]
+    topic = getArticleTopic(article)
+    print("Topic: ", topic)
+'''
 
 # #APE TESTING
 # f = open("/usr/local/google/home/snehalreddy/hackathon/simple-python-template/src/your_project/alien.txt", "r")
