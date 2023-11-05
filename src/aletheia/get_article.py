@@ -28,9 +28,10 @@ def get_article_content(urls):
     return [{"content": split.page_content, "title": title, "url": url} for split, url, title in zip(splits,urls,title)]
 
 
-if __name__ == "__main__":
+'''if __name__ == "__main__":
     urls = [
         "https://www.theguardian.com/world/live/2023/oct/31/israel-hamas-war-live-updates-latest-news-today-hamas-clashes-idf-gaza-aid-plan-failure",
     ]
     content = get_article_content(urls)
     print(content)
+'''
