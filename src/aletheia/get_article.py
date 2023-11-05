@@ -22,8 +22,9 @@ def get_article_content(urls):
     )
     splits = splitter.split_documents(docs_transformed)
 
+
     print(f"Got article content for urls: {urls}")
-    return [split.page_content for split in splits]
+    return [{"content": split.page_content, "url": url} for split, url in zip(splits,urls)]
 
 if __name__ == "__main__":
     urls = [
