@@ -73,11 +73,14 @@ def getKeyPointsClaude(text):
             content="Human: Here is an article, contained in <article> tags:" + \
                 "<article>\n" + text + "</article>" + \
                 "\n\nProvide a summary of the text above," + \
-                "highlighting its key takeaways.\nAssistant:" 
+                "highlighting its key takeaways. Just give a few endline \
+                separated lines\nAssistant:" 
         )
     ]
     resp = llm(leaningPrompt)
-    return resp.content
+    keyPoints = resp.content.split('-')[1:]
+    keyPoints = [f.strip() for f in keyPoints]
+    return keyPoints
 
 def getBiasClaude(text, topic):
     biasPromptMessage = "Human: Here is an article, contained in <article> tags:" + \
@@ -149,8 +152,8 @@ def getArticleAnalysis(article):
 '''
 
 # #APE TESTING
-# f = open("/usr/local/google/home/snehalreddy/hackathon/simple-python-template/src/your_project/alien.txt", "r")
+# f = open("/usr/local/google/home/snehalreddy/hackathon/simple-python-template/src/aletheia/alien.txt", "r")
 # text = f.read()
-# # print(getKeyPointsClaude(text))
+# print(getKeyPointsClaude(text))
 # print(getLeaningClaude(text, "Oumuamua and the debate over whether it could be an alien spacecraft."))
 # # print(getBiasClaude(text, "AI will replace jobs"))
