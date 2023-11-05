@@ -15,8 +15,8 @@ def get_articles_from_urls(urls):
     articles = get_article_content(urls)
     return articles
 
-def get_articles_on_topic(topic, count=3):
-    return get_articles_from_urls(get_urls_on_topic(topic, count=count))
+def get_articles_on_topic(topic, url, count=3):
+    return get_articles_from_urls(get_urls_on_topic(topic, url, count=count))
 
 def search(topic, count=4):
     loader = BraveSearchLoader(

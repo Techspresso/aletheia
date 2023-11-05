@@ -13,15 +13,18 @@ from aletheia.models import Article
 
 def get_title_from_html(html):
     soup = BeautifulSoup(html, "html.parser")
+    print("Find heading: ", soup.find("h1"))
     return soup.find("h1").text
 
 
-def get_article_content(url):
-    urls = [url]
+def get_article_content(urls):
     loader = AsyncChromiumLoader(urls)
     docs = loader.load()
     bs_transformer = BeautifulSoupTransformer()
-    title = get_title_from_html(docs[0].page_content)
+    titles = []
+    for doc in docs:
+        title = get_title_from_html(doc.page_content)
+        titles.append(title)
     docs_transformed = bs_transformer.transform_documents(
         docs, tags_to_extract=["article", "h1"], unwanted_tags=["aside"]
     )
@@ -31,10 +34,9 @@ def get_article_content(url):
     )
     splits = splitter.split_documents(docs_transformed)
     print(f"Got article content for urls: {urls}")
-    return {"content": splits[0].page_content, "url": url, "title": title}
+    return [{"content": splits[i].page_content, "url": urls[i], "title": titles[i]} for i in range(len(urls)) ]
 
-
-if __name__ == "__main__":
-    url = "https://www.theguardian.com/world/live/2023/oct/31/israel-hamas-war-live-updates-latest-news-today-hamas-clashes-idf-gaza-aid-plan-failure"
-    content = get_article_content(url)
-    print(content)
+# if __name__ == "__main__":
+#     url = "https://www.theguardian.com/world/live/2023/oct/31/israel-hamas-war-live-updates-latest-news-today-hamas-clashes-idf-gaza-aid-plan-failure"
+#     content = get_article_content(url)
+#     print(content)

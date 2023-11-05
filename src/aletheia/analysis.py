@@ -16,7 +16,7 @@ from aletheia.utils import remove_answer_tags
 
 llm = ChatAnthropic(temperature=0, anthropic_api_key=secret_key)
 
-justGetNumberText = "Please provide just the number with no explanation"
+justGetNumberText = "Please provide just the number with no explanation.\n"
 
 justGetStatement = "Can you just give one of the statements from your answer without any explanation?\n"
 
@@ -106,7 +106,10 @@ def getBiasClaude(text, topic):
     ]
 
     valResp = llm(biasValPrompt)
-    return int(valResp.content)
+    try:
+        return int(valResp.content)
+    except:
+        return 5
 
 def getLeaningClaude(text, topic):
     antiTopic = getAntiTopic(topic)
@@ -135,7 +138,10 @@ def getLeaningClaude(text, topic):
     ]
 
     valResp = llm(leaningValPrompt)
-    return int(valResp.content)
+    try:
+        return int(valResp.content)
+    except:
+        return 5
 
 def getArticleAnalysis(article):
     topic = getArticleTopic(article)
