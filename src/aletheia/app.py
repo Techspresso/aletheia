@@ -1,3 +1,4 @@
+import pprint
 from flask import Flask
 from flask import request, jsonify
 import json
@@ -16,21 +17,22 @@ def index():
     query = request.args.get("q")
     if not query:
         return "No search query provided"
+    print()
 
     url = base64.b64decode(query).decode() #decode later
-    print(url)
+    print("Fetching article from url: " + url + "\n")
     cur_content = get_article_content([url])[0]
     print(cur_content)
     topic = getArticleTopic(cur_content['content'])
-    print(topic)
+    print("Detected topic: " + topic + "\n")
     isAnti = checkIfAnti(topic)
     if(isAnti):
         anti_topic = getAntiTopic(topic)
-        print(anti_topic)
-    same_articles = get_similar_articles.get_articles_on_topic(topic, url, count=1)
+        print("Generated Augmented Topic: " + anti_topic + "\n")
+    same_articles = get_similar_articles.get_articles_on_topic(topic, url, count=2)
     diff_articles = []
     if(isAnti):
-        diff_articles = get_similar_articles.get_articles_on_topic(anti_topic, url, count=1)
+        diff_articles = get_similar_articles.get_articles_on_topic(anti_topic, url, count=2)
 
     anal_json = {}
     anal_json["articles"] = []
@@ -42,7 +44,10 @@ def index():
     cur_dict["title"] = cur_content['title']
     cur_dict["bias"] = getBiasClaude(cur_content['content'], topic)
     anal_json["articles"].append(cur_dict)
-    print(anal_json)
+    print("Obtained article analysis for the original article")
+    pprint.pprint(cur_dict)
+    print()
+
     for article in same_articles:
         cur_dict = {}
         cur_dict["topic"] = topic
@@ -51,6 +56,9 @@ def index():
         cur_dict["title"] = article['title']
         cur_dict["bias"] = getBiasClaude(article['content'], topic)
         anal_json["articles"].append(cur_dict)
+        print("Obtained article analysis:")
+        pprint.pprint(cur_dict)
+        print()
 
     for article in diff_articles:
         cur_dict = {}
@@ -60,9 +68,10 @@ def index():
         cur_dict["title"] = article['title']
         cur_dict["bias"] = getBiasClaude(article['content'], anti_topic)
         anal_json["articles"].append(cur_dict)
+        print("Obtained article analysis:")
+        pprint.pprint(cur_dict)
+        print()
 
-    print("**********FKIN ANAL*********")
-    print(cur_dict)
     return anal_json
 
 
