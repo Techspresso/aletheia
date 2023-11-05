@@ -1,3 +1,4 @@
+from functools import lru_cache
 from urllib.request import urlopen
 from bs4 import BeautifulSoup
 import re
@@ -13,6 +14,7 @@ from langchain.chains import LLMChain
 from langchain_experimental.llms.anthropic_functions import AnthropicFunctions
 from aletheia.models import ArticleAnalysis
 from aletheia.utils import remove_answer_tags
+from aletheia.cache import cache
 
 llm = ChatAnthropic(temperature=0, anthropic_api_key=secret_key)
 
@@ -68,6 +70,7 @@ def getAntiTopic(topic):
 def getStrongTopic(topic):
     return "AI will definitely replace jobs"
 
+@cache
 def getKeyPointsClaude(text):
     leaningPrompt = [
         HumanMessage(
@@ -83,6 +86,7 @@ def getKeyPointsClaude(text):
     keyPoints = [f.strip() for f in keyPoints]
     return keyPoints
 
+@cache
 def getBiasClaude(text, topic):
     biasPromptMessage = "Human: Here is an article, contained in <article> tags:" + \
                 "<article>\n" + text + "</article>" + \

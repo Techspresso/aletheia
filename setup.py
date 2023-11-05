@@ -26,6 +26,9 @@ setup(
         'playwright>=1.39.0',
         'beautifulsoup4>=4.12.2',
         'tiktoken>=0.5.1',
+        'Flask>=3.0.0',
+        'redis>=5.0.0',
+        'redis-lru==0.1.2'
     ],
     extras_require={
         'test': [
