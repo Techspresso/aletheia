@@ -1,4 +1,6 @@
+from functools import lru_cache
 from langchain.document_loaders import BraveSearchLoader
+from aletheia.cache import cache
 
 from aletheia.get_article import get_article_content
 
@@ -15,6 +17,7 @@ def get_articles_from_urls(urls):
     articles = get_article_content(urls)
     return articles
 
+@cache
 def get_articles_on_topic(topic, url, count=3):
     return get_articles_from_urls(get_urls_on_topic(topic, url, count=count))
 

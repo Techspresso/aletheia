@@ -1,10 +1,12 @@
 from flask import Flask
 from flask import request, jsonify
 import json
+import base64
 from aletheia import get_similar_articles
 from aletheia.analysis import getKeyPointsClaude, getBiasClaude, getArticleAnalysis, getArticleTopic, getAntiTopic, checkIfAnti
 from aletheia.get_article import get_article_content
 from aletheia.models import Article
+
 
 app = Flask(__name__)
 
@@ -14,7 +16,9 @@ def index():
     query = request.args.get("q")
     if not query:
         return "No search query provided"
-    url = query #decode later
+
+    url = base64.b64decode(query).decode() #decode later
+    print(url)
     cur_content = get_article_content([url])[0]
     print(cur_content)
     topic = getArticleTopic(cur_content['content'])
@@ -23,10 +27,10 @@ def index():
     if(isAnti):
         anti_topic = getAntiTopic(topic)
         print(anti_topic)
-    same_articles = get_similar_articles.get_articles_on_topic(topic, url)
+    same_articles = get_similar_articles.get_articles_on_topic(topic, url, count=1)
     diff_articles = []
     if(isAnti):
-        diff_articles = get_similar_articles.get_articles_on_topic(anti_topic, url)
+        diff_articles = get_similar_articles.get_articles_on_topic(anti_topic, url, count=1)
 
     anal_json = {}
     anal_json["articles"] = []
@@ -59,6 +63,7 @@ def index():
 
     print("**********FKIN ANAL*********")
     print(cur_dict)
+    return anal_json
 
 
         
