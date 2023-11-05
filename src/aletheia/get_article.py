@@ -13,7 +13,7 @@ from aletheia.models import Article
 
 def get_title_from_html(html):
     soup = BeautifulSoup(html, "html.parser")
-    print("Find heading: ", soup.find("h1"))
+    # print("Find heading: ", soup.find("h1"))
     return soup.find("h1").text
 
 
