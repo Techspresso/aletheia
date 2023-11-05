@@ -10,9 +10,11 @@ from langchain.prompts import ChatPromptTemplate
 from aletheia import llm
 from aletheia.models import Article
 
+
 def get_title_from_html(html):
     soup = BeautifulSoup(html, "html.parser")
     return soup.find("h1").text
+
 
 def get_article_content(url):
     urls = [url]
@@ -33,8 +35,6 @@ def get_article_content(url):
 
 
 if __name__ == "__main__":
-    urls = [
-        "https://www.theguardian.com/world/live/2023/oct/31/israel-hamas-war-live-updates-latest-news-today-hamas-clashes-idf-gaza-aid-plan-failure",
-    ]
-    content = get_article_content(urls)
+    url = "https://www.theguardian.com/world/live/2023/oct/31/israel-hamas-war-live-updates-latest-news-today-hamas-clashes-idf-gaza-aid-plan-failure"
+    content = get_article_content(url)
     print(content)
