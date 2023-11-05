@@ -1,5 +1,6 @@
 from urllib.request import urlopen
 from bs4 import BeautifulSoup
+import re
 from langchain.chat_models import ChatOpenAI
 from langchain.prompts import ChatPromptTemplate
 from langchain.chains import create_tagging_chain, create_tagging_chain_pydantic
@@ -143,6 +144,41 @@ def getArticleAnalysis(article):
     anal["leaning"] = getLeaningClaude(article.content, topic)/10.0
     anal["bias"] = getBiasClaude(article.content, topic)/10.0
     return anal
+
+def checkIfAnti(topic):
+    checkPromptMessage = "Human: Here is a statement, contained in <statement> tags:" + \
+                "<statement>\n" + topic + "</statement>" + \
+                "Do you think this statement sound factual? \
+                Please provide the answer with yes or no in <answer> tag\nAssistant: <answer>"
+    
+    checkPrompt = [
+        HumanMessage(
+            content= checkPromptMessage
+        )
+    ]
+    resp = llm(checkPrompt)
+    yesOrNo = re.sub("[^a-zA-Z]+", "", resp.content.split('<')[0])
+    # print(resp.content, yesOrNo)
+    # print("***************")
+    if("yes" in yesOrNo.lower()):
+        return 0
+    checkPromptMessage = "Human: Here is a statement, contained in <statement> tags:" + \
+                "<statement>\n" + topic + "</statement>" + \
+                "Does this statement seem to be a part of a news report? \
+                Please provide the answer with yes or no in <answer> tag\nAssistant: <answer>"
+    
+    
+    checkPrompt = [
+        HumanMessage(
+            content= checkPromptMessage
+        )
+    ]
+    resp = llm(checkPrompt)
+    yesOrNo = re.sub("[^a-zA-Z]+", "", resp.content.split('<')[0])
+    # print(resp.content, yesOrNo)
+    if("yes" in yesOrNo.lower()):
+        return 0
+    return 1
     
 '''if __name__ == "__main__":
     url = "https://www.scientificamerican.com/article/the-science-is-clear-gun-control-saves-lives1/"
@@ -155,5 +191,9 @@ def getArticleAnalysis(article):
 # f = open("/usr/local/google/home/snehalreddy/hackathon/simple-python-template/src/aletheia/alien.txt", "r")
 # text = f.read()
 # print(getKeyPointsClaude(text))
-# print(getLeaningClaude(text, "Oumuamua and the debate over whether it could be an alien spacecraft."))
-# # print(getBiasClaude(text, "AI will replace jobs"))
+# print(checkIfAnti("Oumuamua and the debate over whether it could be an alien spacecraft."))
+# print(checkIfAnti("AI will replace jobs"))
+# print(checkIfAnti("Israel-Gaza war: Ceasefire would allow Hamas to regroup, says Blinken"))
+# print(checkIfAnti("Police disperse pro-Palestinian protesters after fireworks fired at officers and into crowd"))
+# print(checkIfAnti("The Science Is Clear: Gun Control Saves Lives"))
+# print(checkIfAnti("Thousands demonstrate in Trafalgar Square for Gaza ceasefire"))
