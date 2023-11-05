@@ -4,7 +4,7 @@ from aletheia.get_article import get_article_content
 
 api_key = "BSAt2nmuC57jmjrGEY9-JNAyAHTU6Z5"
 
-def get_urls_on_topic(topic, url, count=4):
+def get_urls_on_topic(topic, url, count=5):
     docs = search(topic, count=count)
     urls = [doc.metadata["link"] for doc in docs if str(doc.metadata["link"]) != str(url)]
     url_list = urls[:3]
