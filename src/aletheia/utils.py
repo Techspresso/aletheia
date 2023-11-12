@@ -7,6 +7,7 @@ def remove_answer_tags(text):
     return re.sub(clean, '', text)
 
 def extract_titles_from_urls(url):
+    # TODO need to handle cases where the tile isn't in a h1 tag
     response = requests.get(url[0])
     html = response.text  
     soup = BeautifulSoup(html, 'html.parser') 

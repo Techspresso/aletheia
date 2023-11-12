@@ -3,7 +3,7 @@ from flask import Flask
 from flask import request, jsonify
 import json
 import base64
-from aletheia import get_similar_articles
+from aletheia import base64_decode, get_similar_articles
 from aletheia.analysis import getKeyPointsClaude, getBiasClaude, getArticleAnalysis, getArticleTopic, getAntiTopic, checkIfAnti
 from aletheia.get_article import get_article_content
 from aletheia.models import Article
@@ -19,7 +19,7 @@ def index():
         return "No search query provided"
     print()
 
-    url = base64.b64decode(query).decode() #decode later
+    url = base64_decode(query)
     print("Fetching article from url: " + url + "\n")
     cur_content = get_article_content([url])[0]
     print(cur_content)
