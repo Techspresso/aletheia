@@ -1,10 +1,7 @@
-from functools import lru_cache
 from langchain.document_loaders import BraveSearchLoader
 from aletheia.cache import cache
 
 from aletheia.get_article import get_article_content
-
-api_key = "BSAt2nmuC57jmjrGEY9-JNAyAHTU6Z5"
 
 def get_urls_on_topic(topic, url, count=4):
     docs = search(topic, count=count)
@@ -23,7 +20,7 @@ def get_articles_on_topic(topic, url, count=3):
 
 def search(topic, count=4):
     loader = BraveSearchLoader(
-        query=topic, api_key=api_key, search_kwargs={"count": count}
+        query=topic, api_key=search["brave"]["api_key"], search_kwargs={"count": count}
     )
     return loader.load()
 
