@@ -1,0 +1,44 @@
+[build-system]
+requires = ["setuptools", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "your_project"
+version = "0.0.0"
+description = "A tool for reducing ignorance"
+authors = [
+    { name = "Luke Piotrak"},
+    { name = "Snehal Reddy"},
+    { name = "Shriya Roy"}
+]
+license = {file = "LICENSE.txt"}
+keywords = ["LLM", "AI", "Sentiment Analysis", "NLP"]
+urls = { Homepage = "https://github.com/Techspresso/aletheia" }
+readme = "README.md"
+requires-python = ">=3.11"
+
+dependencies = [
+    "langchain>=0.0.330",
+    "langchain_experimental>=0.0.37",
+    "anthropic>=0.5.0",
+    "playwright>=1.39.0",
+    "beautifulsoup4>=4.12.2",
+    "tiktoken>=0.5.1",
+    "Flask>=3.0.0",
+    "redis>=5.0.0",
+    "redis-lru==0.1.2"
+]
+
+[project.optional-dependencies]
+test = [
+    "pytest>=7.4.3",
+]
+
+
+[tool.setuptools]
+package-dir = { "" = "src" }
+packages = ["aletheia"]
+
+[project.scripts]
+get_articles_on_topic = "your_project.cli:get_articles_on_topic"
+get_analysis = "your_project.cli:get_analysis_from_url"
